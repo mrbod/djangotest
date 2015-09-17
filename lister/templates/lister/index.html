@@ -1,0 +1,12 @@
+{{ parent }}
+{% if entry_list %}
+    <ul>
+        <a href="{{ parent }}..">..</a></li>
+        {% for e in entry_list %}
+        <li><a href="{{ parent }}{{ e.path }}">{{ e.path }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing to see here. Move along...</p>
+{% endif %}
+
