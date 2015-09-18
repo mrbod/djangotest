@@ -1,26 +1,39 @@
 #!/usr/bin/env python
+import sys
 import os
 import os.path
 import subprocess as sp
 
-def isgit(path, d):
-    if d.startswith('.'):
-        return False
+gitcmd = 'git rev-parse --show-toplevel'.split()
+
+def _isgit(path, d):
     cwd = os.getcwd()
-    d = os.path.join(path, d)
-    os.chdir(d)
-    o = file('/dev/null', 'w')
+    os.chdir(os.path.join(path, d))
     try:
-        cmd = 'git rev-parse --show-toplevel'
-        r = sp.check_output(cmd.split(), stderr=o).strip()
-        tmp = os.getcwd()
-        if os.path.realpath(r) == os.path.realpath(tmp):
-            return True
-    except:
-        return False
+        try:
+            r = sp.check_output(gitcmd, stderr=devnull).strip()
+            tmp = os.getcwd()
+            if os.path.realpath(r) == os.path.realpath(tmp):
+                return True
+        except Exception as e:
+            sys.stderr.write('_isgit failed: {}\n'.format(str(e)))
+            return False
     finally:
         os.chdir(cwd)
-        o.close()
+    return False
+
+def maybe_git(path, d):
+    if os.path.isdir(os.path.join(path, d, '.git')):
+        return True
+    if os.path.isdir(os.path.join(path, d, 'refs')):
+        return True
+    return False
+
+def isgit(path, d):
+    #print 'path:', path
+    #print 'd:', d
+    if maybe_git(path, d):
+        return _isgit(path, d)
     return False
 
 class Repository(object):
@@ -28,14 +41,33 @@ class Repository(object):
         self.name = name
         self.info = info
 
-for path, dirs, files in os.walk(os.getcwd()):
-    subdirs = []
-    for i, d in enumerate(dirs):
-        if d.startswith('.'):
-            continue
-        elif isgit(path, d):
-            print 'repo:', d
-        else:
-            subdirs.append(d)
-    dirs[:] = subdirs
+    def __str__(self):
+        return '{0.name}\n\t{0.info}'.format(self)
+
+def scan_away(base_path):
+    repos = []
+    for path, dirs, files in os.walk(base_path):
+        subdirs = []
+        for i, d in enumerate(dirs):
+            if d.startswith('.'):
+                continue
+            elif isgit(path, d):
+                print 'repo:', d
+                repos.append(Repository(d, path))
+            else:
+                subdirs.append(d)
+        dirs[:] = subdirs
+    return repos
+
+def scan_for_gits(base_path='.'):
+    global devnull
+    devnull = open(os.devnull, 'w')
+    try:
+        return scan_away(base_path)
+    finally:
+        devnull.close()
+
+if __name__ == '__main__':
+    for r in scan_for_gits('.'):
+        print r
 
