@@ -6,26 +6,7 @@ from .models import Entry
 import os
 import os.path
 import subprocess as sp
-
-def isgit(path, d):
-    if d.startswith('.'):
-        return False
-    cwd = os.getcwd()
-    d = os.path.join(path, d)
-    os.chdir(d)
-    o = file('/dev/null', 'w')
-    try:
-        cmd = 'git rev-parse --show-toplevel'
-        r = sp.check_output(cmd.split(), stderr=o).strip()
-        tmp = os.getcwd()
-        if os.path.realpath(r) == os.path.realpath(tmp):
-            return True
-    except:
-        return False
-    finally:
-        os.chdir(cwd)
-        o.close()
-    return False
+import gitscanner
 
 def base_and_parent(path):
     if path.endswith('/'):
@@ -45,12 +26,14 @@ def dir_entries(base):
     CWD = '.' + base
     for path, dirs, files in os.walk(CWD):
         for d in (x for x in dirs if not x.startswith('.')):
-            if isgit(CWD, d):
+            if gitscanner.isgit(CWD, d):
                 git_list.append(Entry(path=d,
                     description=os.path.realpath(os.path.join(CWD, d))))
             else:
                 entry_list.append(Entry(path=d))
         break
+    git_list.sort()
+    entry_list.sort()
     return git_list, entry_list
 
 os.chdir('repos')
