@@ -1,29 +1,21 @@
-<H1>{{ base }}</H1>
-<hr>
-<a href="/"><b>Home</b></a>
-{% if parent %}
-<a href="{{ parent }}"><b>UP</b></a>
-{% endif %}
-<hr>
+{% extends "lister/base.html" %}
 
-{% if entry_list or git_list %}
-<b>Groups</b>
+{% block title %} Per's repository browser {% endblock %}
+
+{% block groups %}
 <ul>
     {% for e in entry_list %}
-    <li>
-        <a href="{{ base }}{{ e.path }}">{{ e.path }}</a>
-    </li>
+    <li> <a href="{{ base }}{{ e.path }}">{{ e.path }}</a> </li>
     {% endfor %}
 </ul>
-<hr>
-<b>Repositories</b>
+{% endblock %}
+
+{% block repositories %}
 <dl>
     {% for e in git_list %}
-    <dt><b>{{ e.path }}</b></dt>
+    <dt>{{ e.path }}</dt>
     <dd>{{ e.description }}</dd>
     {% endfor %}
-</ul>
-{% else %}
-*** empty ***
-{% endif %}
+</dl>
+{% endblock %}
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+    <head>
+        <title>{% block title %}Site title{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'lister/index.css' %}">
+    </head>
+
+    <body>
+        <div id="navigation">
+            {% block navigation %}
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if parent %}
+                <li><a href="{{ parent }}">Up</a></li>
+                {% else %}
+                <li>Up</li>
+                {% endif %}
+                <li><a href="/new_repo/">Create repository</a></li>
+            </ul>
+            {% endblock %}
+        </div>
+
+        <div id="content">
+            <div id="location">
+                {{ base }}
+            </div>
+            <div id="groups">
+                <b>Groups</b>
+                {% block groups %}{% endblock %}
+            </div>
+
+            <div id="repositories">
+                <b>Repositories</b>
+                {% block repositories %}{% endblock %}
+            </div>
+        </div>
+
+    </body>
+</html>
