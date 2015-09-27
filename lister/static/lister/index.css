@@ -31,12 +31,21 @@ body {
     color: red;
 }
 
+#stuff {
+    position: absolute;
+    left: 0px;
+}
+
 #groups {
     position: absolute;
     left: 0px;
+    width: 250px;
+    overflow: auto;
 }
 #repositories {
     position: absolute;
     left: 450px;
+    width: 1000px;
+    overflow: auto;
 }
 

@@ -26,16 +26,22 @@
             <div id="location">
                 {{ base }}
             </div>
-            <div id="groups">
-                <b>Groups</b>
-                {% block groups %}{% endblock %}
-            </div>
+            <div id="stuff">
+                <div id="groups">
+                    <b>Groups</b>
+                    {% block groups %}{% endblock %}
+                </div>
 
-            <div id="repositories">
-                <b>Repositories</b>
-                {% block repositories %}{% endblock %}
+                <div id="repositories">
+                    <b>Repositories</b>
+                    {% block repositories %}{% endblock %}
+                </div>
             </div>
         </div>
 
+        <script>
+var d = document.getElementById("groups");
+d.style.height = window.innerHeight - d.style.offsetTop - 200;
+        </script>
     </body>
 </html>
