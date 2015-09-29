@@ -5,7 +5,7 @@
 {% block groups %}
 <ul>
     {% for e in entry_list %}
-    <li> <a href="{{ base }}{{ e.path }}">{{ e.path }}</a> </li>
+        <li> <a href="{{ base }}{{ e.path }}">{{ e.path }}</a> </li>
     {% endfor %}
 </ul>
 {% endblock %}
@@ -13,8 +13,8 @@
 {% block repositories %}
 <dl>
     {% for e in git_list %}
-    <dt>{{ e.path }}</dt>
-    <dd>{{ e.description }}</dd>
+        <dt>{{ e.path }}</dt>
+        <dd>{{ e.description }}</dd>
     {% endfor %}
 </dl>
 {% endblock %}

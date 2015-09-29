@@ -41,6 +41,14 @@ def index(request):
     print request.path_info
     extra = request.get_host()
     base, parent = base_and_parent(request.path_info)
+    parents = [('home', '/')]
+    l = [x for x in request.path_info.split('/') if x]
+    for p in l:
+        parents.append((p, os.path.join(parents[-1][1], p)))
+    print 'l', l
+    print 'base', base
+    print 'parent', parent
+    print 'parents', parents
     git_list, entry_list = dir_entries(base)
     template = loader.get_template('lister/index.html')
     context = RequestContext(request,
@@ -48,6 +56,7 @@ def index(request):
                 'entry_list': entry_list,
                 'git_list': git_list,
                 'parent': parent,
+                'parents': parents,
                 'base': base,
                 'extra': extra,
             }

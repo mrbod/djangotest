@@ -10,38 +10,26 @@
     <body>
         <div id="navigation">
             {% block navigation %}
-            <ul>
-                <li><a href="/">Home</a></li>
-                {% if parent %}
-                <li><a href="{{ parent }}">Up</a></li>
-                {% else %}
-                <li>Up</li>
-                {% endif %}
-                <li><a href="/new_repo/">Create repository</a></li>
-            </ul>
+                {% for n, p in parents %}
+                    <a href="{{ p }}">{{ n }}</a>
+                {% endfor %}
             {% endblock %}
         </div>
 
-        <div id="content">
-            <div id="location">
-                {{ base }}
-            </div>
-            <div id="stuff">
-                <div id="groups">
-                    <b>Groups</b>
-                    {% block groups %}{% endblock %}
-                </div>
+        <div id="groups">
+            <b>Groups</b>
+            {% block groups %}{% endblock %}
+        </div>
 
-                <div id="repositories">
-                    <b>Repositories</b>
-                    {% block repositories %}{% endblock %}
-                </div>
-            </div>
+        <div id="repositories">
+            <b>Repositories</b>
+            {% block repositories %}{% endblock %}
         </div>
 
         <script>
-var d = document.getElementById("groups");
-d.style.height = window.innerHeight - d.style.offsetTop - 200;
+            var d = document.getElementById("groups");
+            d.style.height = window.innerHeight - d.style.offsetTop - 200;
+            document.write(d.style.height);
         </script>
     </body>
 </html>
